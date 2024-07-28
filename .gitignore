@@ -74,3 +74,5 @@ _[Ss]cripts
 *.ncrunchsolution
 *.dot[Cc]over
 *vsidx
+*.vs
+*App_Data
