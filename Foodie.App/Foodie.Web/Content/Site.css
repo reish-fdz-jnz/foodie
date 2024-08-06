@@ -18,3 +18,65 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*Styles for register page*/
+#register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-label {
+    width: 280px;
+    text-align: left;
+}
+
+.register-btn {
+    margin-top: 24px;
+    width: 280px;
+    align-items: center;
+}
+
+
+/*Styles for login page*/
+#login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-label {
+    width: 280px;
+    text-align: left;
+}
+
+.login-btn {
+    margin-top: 24px;
+    width: 280px;
+    align-items: center;
+}
+
+.remember-me-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 280px;
+    margin-top: 24px;
+    span {
+        margin-left: 8px;
+    }
+}
