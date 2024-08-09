@@ -132,3 +132,12 @@ textarea {
     width: 280px;
     align-items: center;
 }
+
+/*Styles for cart button*/
+.shopping-cart-img {
+    width: 24px;
+}
+
+.shopping-cart-link {
+    padding-right: 8px;
+}
