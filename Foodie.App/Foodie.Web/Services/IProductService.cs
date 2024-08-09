@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Foodie.Web.Services
 {
-    public interface IUserService
+    public interface IProductService
     {
-        Task<ApplicationUser> GetUserById(string id);
+        Task<List<Product>> GetProducts();
 
-        Task<ApplicationUser> UpdateUser(ApplicationUser user);
-
-
+        Task<List<Product>> GetProductsByCategoryId(int categoryId);
     }
 }

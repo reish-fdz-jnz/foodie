@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Foodie.Web.Repositories
 {
-    public interface IUserRepository
+    public interface IRoleRepository
     {
-        Task<ApplicationUser> GetUserById(string id);
-
-        Task<ApplicationUser> UpdateUser(ApplicationUser user);
+        Task<List<Role>> GetRoles();
     }
 }

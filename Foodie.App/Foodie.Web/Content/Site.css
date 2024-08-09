@@ -80,3 +80,55 @@ textarea {
         margin-left: 8px;
     }
 }
+
+.products-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    row-gap: 16px;
+}
+
+.product-card {
+    width: 24%;
+}
+
+.product-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-stars {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+}
+
+/*Styles for user-profile page*/
+#user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.user-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-profile-label {
+    width: 280px;
+    text-align: left;
+}
+
+.user-profile-btn {
+    margin-top: 24px;
+    width: 280px;
+    align-items: center;
+}

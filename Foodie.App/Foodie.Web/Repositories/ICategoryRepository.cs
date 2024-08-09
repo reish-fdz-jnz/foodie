@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Foodie.Web.Repositories
 {
-    public interface IUserRepository
+    public interface ICategoryRepository
     {
-        Task<ApplicationUser> GetUserById(string id);
-
-        Task<ApplicationUser> UpdateUser(ApplicationUser user);
+        Task<List<Category>> GetCategories();
     }
 }

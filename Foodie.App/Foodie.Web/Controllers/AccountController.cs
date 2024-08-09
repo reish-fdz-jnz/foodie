@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Foodie.Web.Models;
 using Foodie.Web.Repositories;
+using Foodie.Web.Services;
+using System.Collections.Generic;
 
 namespace Foodie.Web.Controllers
 {
@@ -18,15 +20,19 @@ namespace Foodie.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IRoleService roleService;
+        
 
         public AccountController()
         {
+            this.roleService = new RoleService(new RoleRepository());
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            this.roleService = new RoleService(new RoleRepository());
         }
 
         public ApplicationSignInManager SignInManager
@@ -138,8 +144,18 @@ namespace Foodie.Web.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public async Task<ActionResult> Register()
         {
+            List<Role> roles = await this.roleService.GetRoles();
+
+            string defaultRole = "Customer";
+            TempData["roles"] = roles.Select(role => new SelectListItem()
+            {
+                Value = role.Name,
+                Text = role.Name,
+                Selected = role.Name == defaultRole
+            }).ToList();
+            TempData["selectedRoleName"] = defaultRole;
             return View();
         }
 
@@ -158,9 +174,13 @@ namespace Foodie.Web.Controllers
                     UserName = model.Username, 
                     Email = model.Email 
                 };
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
+                string role = TempData["selectedRoleName"].ToString();
+                ;
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, role);
                     await UserManager.SetPhoneNumberAsync(user.Id, model.PhoneNumber);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -406,13 +426,13 @@ namespace Foodie.Web.Controllers
 
         //
         // GET: /Account/Test
-        [AllowAnonymous]
-        public async Task<JsonResult> Test()
-        {
-            var userRespo = new UserRepository();
-            var res = await userRespo.GetUser();
-            return Json(res, JsonRequestBehavior.AllowGet);
-        }
+        //[AllowAnonymous]
+        //public async Task<JsonResult> Test()
+        //{
+        //    //var userRespo = new UserRepository();
+        //    ////var res = await userRespo.GetUser();
+        //    //return Json(res, JsonRequestBehavior.AllowGet);
+        //}
 
         protected override void Dispose(bool disposing)
         {

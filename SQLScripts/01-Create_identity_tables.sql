@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS [dbo].[AspNetUserClaims];
 DROP TABLE IF EXISTS [dbo].[AspNetUserRoles];
 DROP TABLE IF EXISTS [dbo].[AspNetUsers];
 DROP TABLE IF EXISTS [dbo].[AspNetRoles];
+DROP TABLE IF EXISTS [dbo].[AspNetProduct];
+DROP TABLE IF EXISTS [dbo].[AspNetCategory];
 
 CREATE TABLE [dbo].[AspNetUsers] (
     [Id]                   NVARCHAR (128) NOT NULL,
@@ -70,14 +72,37 @@ CREATE NONCLUSTERED INDEX [IX_UserId]
     ON [dbo].[AspNetUserLogins]([UserId] ASC);
 
 CREATE TABLE [dbo].[AspNetUserClaims] (
-    [Id]         INT            IDENTITY (1, 1) NOT NULL,
+    [Id]         INT IDENTITY (1, 1) NOT NULL,
     [UserId]     NVARCHAR (128) NOT NULL,
     [ClaimType]  NVARCHAR (MAX) NULL,
     [ClaimValue] NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_dbo.AspNetUserClaims] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId] FOREIGN KEY (UserId) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
 
 GO
 CREATE NONCLUSTERED INDEX [IX_UserId]
     ON [dbo].[AspNetUserClaims]([UserId] ASC);
+
+
+CREATE TABLE [dbo].[AspNetCategory] (
+    [Id]       INT IDENTITY (1, 1) NOT NULL,
+    [Name]     NVARCHAR (128) NOT NULL,
+    CONSTRAINT [PK_dbo.AspNetCategory] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [UK_Name_dbo.AspNetCategory] UNIQUE (Name)
+);
+
+
+CREATE TABLE [dbo].[AspNetProduct] (
+    [Id]       INT IDENTITY (1, 1) NOT NULL,
+    [Name]     NVARCHAR (128) NOT NULL,
+	[Price]    DECIMAL(12,4) NOT NULL,
+	[Quantity] INT NOT NULL DEFAULT 0,
+	[Rating]   INT NOT NULL DEFAULT 0,
+	[ImageUrl] NVARCHAR(256) NOT NULL,
+	[CategoryId] INT NOT NULL,
+    CONSTRAINT [PK_dbo.AspNetProduct] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [UK_Name_dbo.AspNetProduct] UNIQUE (Name),
+	CONSTRAINT [FK_dbo.AspNetProduct_dbo.AspNetCategory] FOREIGN KEY (CategoryId) REFERENCES [dbo].[AspNetCategory] ([Id]) ON DELETE CASCADE,
+	CONSTRAINT [CK_Rating_dbo.AspNetProduct] CHECK (Rating >= 0 AND Rating <=5 )
+);

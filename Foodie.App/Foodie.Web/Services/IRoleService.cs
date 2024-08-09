@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace Foodie.Web.Services
 {
-    public interface IUserService
+    public interface IRoleService
     {
-        Task<ApplicationUser> GetUserById(string id);
-
-        Task<ApplicationUser> UpdateUser(ApplicationUser user);
-
-
+        Task<List<Role>> GetRoles();
     }
 }
