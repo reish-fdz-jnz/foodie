@@ -25,51 +25,101 @@ namespace Foodie.Web.Controllers
         }
 
 
-        public async Task<ActionResult> Index(string categoryId = "0")
+        public async Task<ActionResult> Index()
         {
-            List<Product> products = null;
-            int id = Int32.Parse(categoryId);
-            if (id == 0)
-            {
-                products = await this.productService.GetProducts();
-
-            }
-            else 
-            {
-                products = await this.productService.GetProductsByCategoryId(id);
-            }
-           
+            List<Product> products = await this.productService.GetProducts(); 
             List<Category> categories = await this.categoryService.GetCategories();
-            categories.Add(new Category() { 
-                Id = 0,
-                Name = "All"
-            });
 
-            ViewBag.Categories = categories.Select(category => new SelectListItem()
+            ViewBag.Categories = this.MapCategoriesToSelectListItems(categories);
+            
+            ViewBag.Ratings = this.MapRatingsToSelectListItems();
+
+            ViewBag.Products = products;
+
+            ProductSearchFilters productSearchFilters = new ProductSearchFilters()
             {
-                Value = category.Id.ToString(),
-                Text = category.Name,
-                Selected = id == 0
-            }).ToList();
-            TempData["selectedCategoryId"] = id;
-            TempData.Keep("selectedCategoryId");
+               CategoryId = "0",
+               RatingId = "0",
+               Quantity = 0,
+               Name = ""
+            };
 
-            return View(products);
+            return View(productSearchFilters);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ProductsByCategoryId(string categoryId) 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(ProductSearchFilters productSearchFilters) 
         {
-            int id = Int32.Parse(categoryId);
-            if (id == 0) 
+            List<Product> products = await this.productService.GetProducts();
+
+            List<Category> categories = await this.categoryService.GetCategories();
+
+            ViewBag.Categories = this.MapCategoriesToSelectListItems(categories);
+
+            ViewBag.Ratings = this.MapRatingsToSelectListItems();
+
+            ViewBag.Products = products;
+
+            return View(productSearchFilters);
+        }
+
+        private List<SelectListItem> MapCategoriesToSelectListItems(List<Category> categories) 
+        {
+            List<SelectListItem> items = categories.Select(category => new SelectListItem()
             {
-                List<Product> allProducts = await this.productService.GetProducts();
-                return View(allProducts);
-            }
+                Value = category.Id.ToString(),
+                Text = category.Name
+            }).ToList();
 
-            List<Product> filteredProducts = await this.productService.GetProductsByCategoryId(id);
+            items.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "All Categories",
+                Selected = true
+            });
 
-            return RedirectToAction("Index","Home",filteredProducts);
+            return items;
+        }
+
+        private List<SelectListItem> MapRatingsToSelectListItems( ) 
+        {
+            return new List<SelectListItem>()
+            {
+                new SelectListItem()
+                {
+                    Value = "1",
+                    Text = "1 Star"
+                },
+                 new SelectListItem()
+                {
+                    Value = "2",
+                    Text = "2 Stars"
+                },
+                  new SelectListItem()
+                {
+                    Value = "3",
+                    Text = "3 Stars"
+                },
+                 new SelectListItem()
+                {
+                    Value = "4",
+                    Text = "4 Stars"
+                },
+                  new SelectListItem()
+                {
+                    Value = "5",
+                    Text = "5 Stars"
+                },
+                new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "All Ratings",
+                    Selected = true
+                }
+            };
+
+
         }
     }
 }

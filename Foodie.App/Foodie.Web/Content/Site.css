@@ -81,6 +81,7 @@ textarea {
     }
 }
 
+/*Styles for home page*/
 .products-container {
     display: flex;
     flex-direction: row;
@@ -88,6 +89,14 @@ textarea {
     justify-content: space-between;
     align-items: stretch;
     row-gap: 16px;
+}
+.filters-container {
+    display: flex;
+    flex-direction: row;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .product-card {

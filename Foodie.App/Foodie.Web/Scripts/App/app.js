@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $("#productsDropDownForm").change(function () {
+  /*  $("#productsDropDownForm").change(function () {
         var categoryId = $("#productsDropDown").val();
 
         var url = $("#productsDropDownForm").attr("action") + "?categoryId=" + categoryId;
@@ -28,5 +28,7 @@
         //}
         });
     });
+    */
 });
+
 

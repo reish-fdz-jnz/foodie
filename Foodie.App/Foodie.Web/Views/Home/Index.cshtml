@@ -1,49 +1,38 @@
 ﻿@using Foodie.Web.Models
-@model  List<Product>
-
+@model ProductSearchFilters
 
 
 @{
-
     string notFoundMessage = "Products not found";
-    string addToOrderLabel = "Add to order";
-    string selectedCategoryId = TempData["selectedCategoryId"].ToString();
+    string productNameLabel = "Product Name";
+    string productQuantityLabel = "Product Quantity";
     IEnumerable<SelectListItem> categories = (IEnumerable<SelectListItem>)ViewBag.Categories;
+    IEnumerable<SelectListItem> ratings = (IEnumerable<SelectListItem>)ViewBag.Ratings;
+    List<Product> products = (List<Product>)ViewBag.Products;
 
-    if (Model == null)
+    <div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form" , @class = "filters-container" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.DropDownListFor(m => m.CategoryId, categories, new { @id = "productsDropDown", @class = "form-control" })
+            @Html.DropDownListFor(m => m.RatingId, ratings, new { @id = "ratingDropDown", @class = "form-control" })
+            @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", placeholder = productQuantityLabel })
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = productNameLabel })
+
+            <input type="submit" value="Search" class="btn btn-dark" />
+        }
+
+
+    </div>
+
+    if (@products == null)
     {
         <h2>@notFoundMessage</h2>
     }
     else
     {
-        <div>
-            @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @id = "productsDropDownForm" }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.DropDownList(selectedCategoryId, categories, new { @id = "productsDropDown", @class = "form-control" })
-            }
-        </div>
-        <div class="products-container">
-            @foreach (Product product in Model)
-            {
-                <div class="card product-card">
-                    <img src="@product.ImageUrl" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="product-card-body">
-                            <h5 class="card-title">@product.Name</h5>
-                            <h6>@product.Price</h6>
-                            <div class="product-stars">
-                                @for (int rating = 0; rating < @product.Rating; rating++)
-                                {
-                                    <img src="~/Images/star-fill.svg" alt="Star" />
-                                }
-                            </div>
-                            <button class="btn btn-primary">@addToOrderLabel</button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+        @Html.Partial("~/Views/Home/ProductsPartial.cshtml", @products)
     }
 }
 

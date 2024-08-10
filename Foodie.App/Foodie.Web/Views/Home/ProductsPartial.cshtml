@@ -1,0 +1,28 @@
+﻿@using Foodie.Web.Models
+@model  List<Product>
+
+@{
+    string addToOrderLabel = "Add to order";
+}
+
+<div class="products-container">
+    @foreach (Product product in Model)
+    {
+        <div class="card product-card">
+            <img src="@product.ImageUrl" class="card-img-top" alt="...">
+            <div class="card-body">
+                <div class="product-card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <h6>@product.Price</h6>
+                    <div class="product-stars">
+                        @for (int rating = 0; rating < @product.Rating; rating++)
+                        {
+                            <img src="~/Images/star-fill.svg" alt="Star" />
+                        }
+                    </div>
+                    <button class="btn btn-primary">@addToOrderLabel</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
