@@ -32,7 +32,7 @@ namespace Foodie.Web.Services
                 if ((Int32.Parse(productSearchFilters.CategoryId) == 0 || product.CategoryId == Int32.Parse(productSearchFilters.CategoryId)) &&
                     (Int32.Parse(productSearchFilters.RatingId) == 0 || product.Rating == Int32.Parse(productSearchFilters.RatingId)) &&
                      product.Quantity >= productSearchFilters.Quantity && 
-                     (productSearchFilters.Name.Equals("") || product.Name.ToLower().Contains(productSearchFilters.Name.ToLower())))
+                     (productSearchFilters.Name == null|| product.Name.ToLower().Contains(productSearchFilters.Name.ToLower())))
                 { 
                     filteredProducts.Add(product);
                 }
