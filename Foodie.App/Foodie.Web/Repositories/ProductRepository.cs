@@ -26,19 +26,5 @@ namespace Foodie.Web.Repositories
                 return users.ToList();
             }
         }
-
-        
-        public async Task<List<Product>> GetProductsByCategoryId(int categoryId)
-        {
-            string sqlConnection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            {
-                string sql = "SELECT [Id],[Name],[Price],[Quantity],[Rating],[ImageUrl],[CategoryId] FROM [AspNetProduct] " +
-                    "WHERE [CategoryId]=@categoryId;";
-                IEnumerable<Product> products = await connection.QueryAsync<Product>(sql, new {categoryId = categoryId });
-
-                return products.ToList();
-            }
-        }
     }
 }

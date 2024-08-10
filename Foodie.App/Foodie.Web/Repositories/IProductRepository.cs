@@ -10,7 +10,5 @@ namespace Foodie.Web.Repositories
     public interface IProductRepository
     {
         Task<List<Product>> GetProducts();
-
-        Task<List<Product>> GetProductsByCategoryId(int categoryId);
     }
 }

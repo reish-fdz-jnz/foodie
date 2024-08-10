@@ -51,7 +51,7 @@ namespace Foodie.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(ProductSearchFilters productSearchFilters) 
         {
-            List<Product> products = await this.productService.GetProducts();
+            List<Product> products = await this.productService.GetProductsByFilters(productSearchFilters);
 
             List<Category> categories = await this.categoryService.GetCategories();
 
