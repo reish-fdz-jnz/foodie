@@ -1,4 +1,5 @@
 ﻿@using Foodie.Web.Models
+@using Microsoft.AspNet.Identity;
 @model ProductSearchFilters
 
 
@@ -8,11 +9,12 @@
     string productQuantityLabel = "Product Quantity";
     IEnumerable<SelectListItem> categories = (IEnumerable<SelectListItem>)ViewBag.Categories;
     IEnumerable<SelectListItem> ratings = (IEnumerable<SelectListItem>)ViewBag.Ratings;
-    List<Product> products = (List<Product>)ViewBag.Products;
+    Cart cart = new Cart();
+
 
     <div>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form" , @class = "filters-container" }))
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form", @class = "filters-container" }))
         {
             @Html.AntiForgeryToken()
             @Html.DropDownListFor(m => m.CategoryId, categories, new { @id = "productsDropDown", @class = "form-control" })
@@ -26,14 +28,13 @@
 
     </div>
 
-    if (@products == null)
+    if (@ViewBag.Products == null)
     {
         <h2>@notFoundMessage</h2>
     }
     else
     {
-        @Html.Partial("~/Views/Home/ProductsPartial.cshtml", @products)
+        @Html.Partial("~/Views/Home/ProductsPartial.cshtml", @cart)
     }
 }
-
 

@@ -37,9 +37,7 @@ namespace Foodie.Web.Services
                     filteredProducts.Add(product);
                 }
             }
-
             return filteredProducts;
-
         }
     }
 }

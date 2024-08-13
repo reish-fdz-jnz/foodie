@@ -1,3 +1,4 @@
+USE Foodie;
 
 INSERT INTO [dbo].[AspNetRoles] (Id, Name) 
 VALUES (NEWID(),'Seller'),
@@ -13,7 +14,11 @@ VALUES('Drinks'),
 	('Dinner'), 
 	('Snacks');
 
-
+INSERT INTO [dbo].[AspNetPaymentType] (Name) 
+VALUES ('Credit Card'),
+		('Debit Card'),
+		('Paypal'),
+		('Cash');
 
 
 

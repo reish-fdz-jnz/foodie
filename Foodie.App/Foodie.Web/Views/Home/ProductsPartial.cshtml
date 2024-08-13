@@ -1,28 +1,40 @@
 ﻿@using Foodie.Web.Models
-@model  List<Product>
+@using Microsoft.AspNet.Identity;
+@model  Cart
 
 @{
+    List<Product> products = (List<Product>)ViewBag.Products;
     string addToOrderLabel = "Add to order";
 }
 
+
 <div class="products-container">
-    @foreach (Product product in Model)
+    @foreach (Product product in products)
     {
         <div class="card product-card">
-            <img src="@product.ImageUrl" class="card-img-top" alt="...">
-            <div class="card-body">
-                <div class="product-card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <h6>@product.Price</h6>
-                    <div class="product-stars">
-                        @for (int rating = 0; rating < @product.Rating; rating++)
-                        {
-                            <img src="~/Images/star-fill.svg" alt="Star" />
-                        }
+            @using (Html.BeginForm("AddToCart", "ShoppingCart", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <img src="@product.ImageUrl" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <div class="product-card-body">
+                        <h5 id="productName" class="card-title">@product.Name</h5>
+                        <h6>@product.Price</h6>
+                        <div class="product-stars">
+                            @for (int rating = 0; rating < @product.Rating; rating++)
+                            {
+                                <img src="~/Images/star-fill.svg" alt="Star" />
+                            }
+                        </div>
+                        <input type="hidden" value="@product.Id" name="ProductId" />
+                        <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
+                        <input type="submit" value="@addToOrderLabel" class="btn btn-dark" />
                     </div>
-                    <button class="btn btn-primary">@addToOrderLabel</button>
                 </div>
-            </div>
+            }
         </div>
     }
 </div>
+
+
+
