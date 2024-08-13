@@ -14,5 +14,6 @@ namespace Foodie.Web.Repositories
 
         Task UpdateItem(Cart cart);
         Task<Cart> GetItemByProductIdAndUserId(int productId, string userId);
+        Task<List<Cart>> GetItemsByUserId(string userId);
     }
 }

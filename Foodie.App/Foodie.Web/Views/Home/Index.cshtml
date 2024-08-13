@@ -9,6 +9,7 @@
     string productQuantityLabel = "Product Quantity";
     IEnumerable<SelectListItem> categories = (IEnumerable<SelectListItem>)ViewBag.Categories;
     IEnumerable<SelectListItem> ratings = (IEnumerable<SelectListItem>)ViewBag.Ratings;
+    int cartCount = (int)ViewBag.CartCount;
     Cart cart = new Cart();
 
 
@@ -17,6 +18,13 @@
         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form", @class = "filters-container" }))
         {
             @Html.AntiForgeryToken()
+            <a href="@Url.Action("Index", "ShoppingCart")" class="btn btn-light position-relative">
+                <img class="shopping-cart-img" src="~/Images/shopping-cart.png" alt="shopping-cart" />
+                <span class="badge rounded-circle bg-danger">
+                    @cartCount
+                    <span class="visually-hidden">unread messages</span>
+                </span>
+            </a>
             @Html.DropDownListFor(m => m.CategoryId, categories, new { @id = "productsDropDown", @class = "form-control" })
             @Html.DropDownListFor(m => m.RatingId, ratings, new { @id = "ratingDropDown", @class = "form-control" })
             @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", placeholder = productQuantityLabel })

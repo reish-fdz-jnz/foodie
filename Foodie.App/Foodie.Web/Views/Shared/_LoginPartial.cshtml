@@ -6,15 +6,6 @@
     @Html.AntiForgeryToken()
 
     <ul class="navbar-nav navbar-right">
-        <li class="shopping-cart-link">
-            <a href="@Url.Action("Index", "ShoppingCart")" class="btn btn-dark position-relative">
-                <img class="shopping-cart-img" src="~/Images/shopping-cart.png" alt="shopping-cart" />
-                <span class="badge rounded-circle bg-danger">
-                    0
-                    <span class="visually-hidden">unread messages</span>
-                </span>
-            </a>
-        </li>
         <li>
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
         </li>

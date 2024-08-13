@@ -1,6 +1,7 @@
 ﻿using Foodie.Web.Models;
 using Foodie.Web.Repositories;
 using Foodie.Web.Services;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,13 @@ namespace Foodie.Web.Controllers
 
         private ICategoryService categoryService;
 
+        private IShoppingCartService shoppingCartService;
+
         public HomeController() 
         {
             this.productService = new ProductService(new ProductRepository());
             this.categoryService = new CategoryService(new CategoryRepository());
+            this.shoppingCartService = new ShoppingCartService(new ShoppingCartRepository());
         }
 
 
@@ -35,6 +39,8 @@ namespace Foodie.Web.Controllers
             ViewBag.Ratings = this.MapRatingsToSelectListItems();
 
             ViewBag.Products = products;
+
+            ViewBag.CartCount = await this.shoppingCartService.GetItemsCountByUserId(User.Identity.GetUserId());
 
             ProductSearchFilters productSearchFilters = new ProductSearchFilters()
             {

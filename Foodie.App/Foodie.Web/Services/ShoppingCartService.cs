@@ -38,5 +38,18 @@ namespace Foodie.Web.Services
         {
             return await shoppingCartRepository.GetItemByProductIdAndUserId(productId,userId);
         }
+
+        public async Task<List<Cart>> GetItemsByUserId(string userId)
+        {
+            return await shoppingCartRepository.GetItemsByUserId(userId);
+        }
+
+
+        public async Task<int> GetItemsCountByUserId(string userId)
+        {
+            List<Cart> carts = await shoppingCartRepository.GetItemsByUserId(userId);
+
+            return carts.Count();
+        }
     }
 }
