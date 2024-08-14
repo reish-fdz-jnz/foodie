@@ -39,5 +39,10 @@ namespace Foodie.Web.Services
             }
             return filteredProducts;
         }
+
+        public async Task<List<Product>> GetProductsByIds(List<int> productIds) 
+        { 
+            return await productRepository.GetProductsByIds(productIds);
+        }
     }
 }

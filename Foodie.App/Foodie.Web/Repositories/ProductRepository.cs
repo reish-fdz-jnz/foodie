@@ -22,8 +22,25 @@ namespace Foodie.Web.Repositories
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
                 string sql = "SELECT [Id],[Name],[Price],[Quantity],[Rating],[ImageUrl],[CategoryId] FROM [AspNetProduct]";
-                IEnumerable<Product> users = await connection.QueryAsync<Product>(sql);
-                return users.ToList();
+                IEnumerable<Product> products = await connection.QueryAsync<Product>(sql);
+                return products.ToList();
+            }
+        }
+
+        public async Task<List<Product>> GetProductsByIds(List<int> productIds)
+        {
+            string sqlConnection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            {
+                string sql = "SELECT [Id],[Name],[Price],[Quantity],[Rating],[ImageUrl],[CategoryId] FROM [AspNetProduct] " +
+                "WHERE [Id] IN @ids; ";
+                object parameters = new
+                {
+                    ids = productIds.ToArray()
+                };
+
+                IEnumerable<Product> products = await connection.QueryAsync<Product>(sql,parameters);
+                return products.ToList();
             }
         }
     }

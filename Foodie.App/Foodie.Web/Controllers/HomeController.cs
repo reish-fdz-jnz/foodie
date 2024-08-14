@@ -25,7 +25,7 @@ namespace Foodie.Web.Controllers
         {
             this.productService = new ProductService(new ProductRepository());
             this.categoryService = new CategoryService(new CategoryRepository());
-            this.shoppingCartService = new ShoppingCartService(new ShoppingCartRepository());
+            this.shoppingCartService = new ShoppingCartService(new ShoppingCartRepository(), new ProductService(new ProductRepository()));
         }
 
 

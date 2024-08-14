@@ -10,10 +10,13 @@ namespace Foodie.Web.Services
 {
     public  class ShoppingCartService : IShoppingCartService
     {
-        IShoppingCartRepository shoppingCartRepository;
-        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository) 
+        private IShoppingCartRepository shoppingCartRepository;
+
+        private IProductService productService;
+        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository, IProductService productService) 
         { 
             this.shoppingCartRepository = shoppingCartRepository;
+            this.productService = productService;
         }
 
         public async Task InsertOrUpdateItem(Cart cart)
@@ -41,7 +44,22 @@ namespace Foodie.Web.Services
 
         public async Task<List<Cart>> GetItemsByUserId(string userId)
         {
-            return await shoppingCartRepository.GetItemsByUserId(userId);
+            List<Cart> carts = await shoppingCartRepository.GetItemsByUserId(userId);
+
+            List<int> productIds = carts.Select(product => product.ProductId).ToList();
+
+            List<Product> products = await this.productService.GetProductsByIds(productIds);
+
+            foreach (Cart cart in carts)
+            {
+                Product product = products.FirstOrDefault(p => p.Id == cart.ProductId);
+                if (product != null) 
+                {
+                    cart.Product =product;
+                }
+                
+            }
+            return carts;
         }
 
 

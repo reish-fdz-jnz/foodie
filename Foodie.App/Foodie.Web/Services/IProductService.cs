@@ -12,5 +12,7 @@ namespace Foodie.Web.Services
         Task<List<Product>> GetProducts();
 
         Task<List<Product>> GetProductsByFilters(ProductSearchFilters productSearchFilters);
+
+        Task<List<Product>> GetProductsByIds(List<int> productIds);
     }
 }

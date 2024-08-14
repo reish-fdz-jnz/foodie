@@ -147,4 +147,41 @@ textarea {
     width: 24px;
 }
 
+/*Styles for ShoppingCart*/
+.shopping-cart-header {
+    padding-bottom: 16px;
+}
+
+.shopping-cart-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    row-gap: 16px;
+}
+
+.shopping-cart {
+    width: 100%;
+}
+
+.shopping-cart-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.shopping-cart-single-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.shopping-cart-subtotal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.checkout-btn {
+    display: flex;
+    justify-content: flex-end;
+}
 
