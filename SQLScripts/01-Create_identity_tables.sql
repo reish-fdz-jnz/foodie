@@ -122,16 +122,29 @@ CREATE TABLE [dbo].[AspNetCart] (
     CONSTRAINT [FK_dbo.AspNetCart_dbo.AspNetProduct] FOREIGN KEY (ProductId) REFERENCES [dbo].[AspNetProduct] ([Id]) ON DELETE CASCADE
 );
 
+CREATE TABLE [dbo].[AspNetPayment] (
+    [Id]          INT IDENTITY (1, 1) NOT NULL,
+	[CarName]     NVARCHAR (256) NOT NULL,
+	[ExpiryDate]  DATE NOT NULL,
+    [Country]     NVARCHAR (256) NOT NULL,
+    [CvvNumber]   INT NOT NULL,
+    [PaymentTypeId] INT NOT NULL,
+    CONSTRAINT [PK_dbo.AspNetPayment] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_dbo.AspNetOrderDetail_dbo.AspNetPaymentType] FOREIGN KEY (PaymentTypeId) REFERENCES [dbo].[AspNetPaymentType] ([Id]) ON DELETE CASCADE,
+);
+
 CREATE TABLE [dbo].[AspNetOrder] (
     [Id]          INT IDENTITY (1, 1) NOT NULL,
     [Address]     NVARCHAR (256) NOT NULL,
     [Total]       DECIMAL(12,4) NOT NULL,
     [SellerId]    NVARCHAR (128) NOT NULL,
     [CustomerId]  NVARCHAR (128) NOT NULL,
+    [PaymentId]   INT  NOT NULL,
     [OrderDateTimeUTC]   DATETIME NOT NULL,
     CONSTRAINT [PK_dbo.AspNetOrder] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersSellerId] FOREIGN KEY (SellerId) REFERENCES [dbo].[AspNetUsers] ([Id]),
-    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersCustomerId] FOREIGN KEY (CustomerId) REFERENCES [dbo].[AspNetUsers] ([Id]) 
+    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersSeller] FOREIGN KEY (SellerId) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersCustomer] FOREIGN KEY (CustomerId) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetPayment] FOREIGN KEY (PaymentId) REFERENCES [dbo].[AspNetPayment] ([Id]) 
 );
 
 CREATE TABLE [dbo].[AspNetOrderDetail] (
@@ -151,16 +164,5 @@ CREATE TABLE [dbo].[AspNetPaymentType] (
     CONSTRAINT [PK_dbo.AspNetPaymentType] PRIMARY KEY CLUSTERED ([Id] ASC),
 );
 
-CREATE TABLE [dbo].[AspNetPayment] (
-    [Id]          INT IDENTITY (1, 1) NOT NULL,
-    [UserId]      NVARCHAR (128) NOT NULL,
-	[CarName]     NVARCHAR (256) NOT NULL,
-	[ExpiryDate]  DATE NOT NULL,
-    [Country]     NVARCHAR (256) NOT NULL,
-    [CvvNumber]   INT NOT NULL,
-    [PaymentTypeId] INT NOT NULL,
-    CONSTRAINT [PK_dbo.AspNetPayment] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_dbo.AspNetPayment_dbo.AspNetUsers] FOREIGN KEY (UserId) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_dbo.AspNetOrderDetail_dbo.AspNetPaymentType] FOREIGN KEY (PaymentTypeId) REFERENCES [dbo].[AspNetPaymentType] ([Id]) ON DELETE CASCADE,
-);
+
 
