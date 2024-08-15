@@ -169,7 +169,14 @@ textarea {
     justify-content: space-between;
 }
 
-.shopping-cart-single-row{
+.shopping-cart-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.shopping-cart-single-row {
     display: flex;
     flex-direction: row;
 }
@@ -185,3 +192,23 @@ textarea {
     justify-content: flex-end;
 }
 
+/*Styles for CheckOut Page*/
+.order-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.payment-information-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    background-color: red;
+}
+
+.order-table-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    background-color: blue;
+}

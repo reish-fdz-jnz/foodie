@@ -9,8 +9,9 @@ namespace Foodie.Web.Repositories
 {
     public interface IShoppingCartRepository
     {
-
         Task InsertItem(Cart cart);
+
+        Task DeleteItemById(int id);
 
         Task UpdateItem(Cart cart);
         Task<Cart> GetItemByProductIdAndUserId(int productId, string userId);

@@ -36,6 +36,11 @@ namespace Foodie.Web.Services
             }
         }
 
+        public async Task DeleteItemById(int id)
+        {
+            await shoppingCartRepository.DeleteItemById(id);
+        }
+
 
         public async Task<Cart> GetItemByProductIdAndUserId(int productId, string userId) 
         {

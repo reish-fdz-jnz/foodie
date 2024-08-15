@@ -4,7 +4,9 @@
 @{
     List<Cart> carts = (List<Cart>)ViewBag.Carts;
     int cartCount = (int)ViewBag.CartCount;
+    string noItemsMessage = "The shopping cart is empty";
     string goToCheckOut = "Go To CheckOut";
+    string deleteItem = "Delete";
     string currencyLabel = "CRC-";
     string unitsLabel = "-Unit(s)";
     string subtotalLabel = "SubTotal";
@@ -26,13 +28,21 @@
     @foreach (Cart cart in carts)
     {
         <div class="card shopping-cart">
-            @using (Html.BeginForm("AddToCart", "ShoppingCart", FormMethod.Post, new { role = "form" }))
-            {
-                decimal productPriceByQuantity = cart.Product.Price * cart.Quantity;
-                subTotal += productPriceByQuantity;
-                @Html.AntiForgeryToken()
-                <div class="card-body">
-                    <div class="shopping-cart-body">
+            <div class="card-body">
+                <div class="shopping-cart-body">
+                    @using (Html.BeginForm("DeleteCart", "ShoppingCart", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" value="@cart.ProductId" name="ProductId" />
+                        <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
+                        <input type="submit" value="@deleteItem" class="btn btn-dark" />
+                    }
+
+                    @using (Html.BeginForm("AddToCart", "ShoppingCart", FormMethod.Post, new { role = "form", @class = "shopping-cart-form" }))
+                    {
+                        decimal productPriceByQuantity = cart.Product.Price * cart.Quantity;
+                        subTotal += productPriceByQuantity;
+                        @Html.AntiForgeryToken()
                         <div class="shopping-cart-single-row">
                             <h5><span>@cart.Quantity</span>@unitsLabel</h5>
                         </div>
@@ -40,29 +50,36 @@
                         <div class="shopping-cart-single-row">
                             <h5>@currencyLabel<span>@productPriceByQuantity</span></h5>
                         </div>
-                        <input type="hidden" value="@cart.ProductId" name="ProductId" />
-                        <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
-                    </div>
+                    }
                 </div>
-            }
+            </div>
         </div>
     }
-    <div class="shopping-cart-subtotal">
-        <h5>@subtotalLabel</h5>
-           <div class="shopping-cart-single-row">
-                <h5>@currencyLabel<span>@subTotal</span></h5>
-           </div>
-    </div>
-    @using (Html.BeginForm("AddToCart", "ShoppingCart", FormMethod.Post, new { role = "form" , @class = "checkout-btn"}))
+
+    @if (cartCount > 0)
     {
-        @Html.AntiForgeryToken()
-        <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
-        <input type="submit" value="@goToCheckOut" class="btn btn-dark" />
+        <div class="shopping-cart-subtotal">
+            <h5>@subtotalLabel</h5>
+            <div class="shopping-cart-single-row">
+                <h5>@currencyLabel<span>@subTotal</span></h5>
+            </div>
+        </div>
+        using (Html.BeginForm("Index", "CheckOut", FormMethod.Post, new { role = "form", @class = "checkout-btn" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
+            <input type="submit" value="@goToCheckOut" class="btn btn-dark" />
+        }
     }
+    else
+    {
+        <h5>@noItemsMessage</h5>
+    }
+
 </div>
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
 

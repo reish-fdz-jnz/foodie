@@ -35,13 +35,23 @@ namespace Foodie.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost] // ShoppingCart/AddToCart
+        [ValidateAntiForgeryToken] 
         public async Task<ActionResult> AddToCart(Cart cart)
         {
             await shoppingCartService.InsertOrUpdateItem(cart);
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost] // ShoppingCart/DeleteCart
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteCart(Cart cart)
+        {
+            await shoppingCartService.DeleteItemById(cart.Id);
+
+            return RedirectToAction("Index", "ShoppingCart");
+        }
+
     }
 }

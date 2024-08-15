@@ -11,6 +11,8 @@ namespace Foodie.Web.Services
     {
         Task InsertOrUpdateItem(Cart cart);
 
+        Task DeleteItemById(int id);
+
         Task<Cart> GetItemByProductIdAndUserId(int productId, string userId);
 
         Task<List<Cart>> GetItemsByUserId(string userId);

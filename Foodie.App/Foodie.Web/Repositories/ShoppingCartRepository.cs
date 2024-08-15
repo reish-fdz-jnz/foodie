@@ -31,6 +31,19 @@ namespace Foodie.Web.Repositories
             }
         }
 
+        public async Task DeleteItemById(int id)
+        {
+            string sqlConnection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            {
+                string sql = "DELETE FROM [AspNetCart] WHERE [Id]=@id;" ;
+                object parameters = new
+                {
+                    Id = id
+                };
+                int rowsAffected = await connection.ExecuteAsync(sql, parameters);
+            }
+        }
         public async Task UpdateItem(Cart cart)
         {
             string sqlConnection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;

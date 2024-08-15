@@ -124,7 +124,7 @@ CREATE TABLE [dbo].[AspNetCart] (
 
 CREATE TABLE [dbo].[AspNetPayment] (
     [Id]          INT IDENTITY (1, 1) NOT NULL,
-	[CarName]     NVARCHAR (256) NOT NULL,
+	[CarNumber]     NVARCHAR (256) NOT NULL,
 	[ExpiryDate]  DATE NOT NULL,
     [Country]     NVARCHAR (256) NOT NULL,
     [CvvNumber]   INT NOT NULL,

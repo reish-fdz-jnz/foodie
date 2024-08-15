@@ -1,0 +1,30 @@
+﻿@using Foodie.Web.Models
+@using Microsoft.AspNet.Identity;
+@model Order
+
+@{
+    string addressLabel = "Address";
+}
+
+<div class="order-container">
+    <div class="payment-information-container">
+        <h1>Delivery Details</h1>
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = addressLabel })
+    </div>
+
+    <table class="table order-table-container">
+        <thead>
+            <tr>
+                <th scope="col">Order Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>SubTotal</td>
+                <td>Delivery Fee</td>
+                <td>Service Fee</td>
+                <td>Total</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
