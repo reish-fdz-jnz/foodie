@@ -253,6 +253,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\product1.jpeg" />
+    <Content Include="Images\product2.jpeg" />
+    <Content Include="Images\product3.jpeg" />
+    <Content Include="Images\product4.jpeg" />
     <Content Include="Images\shopping-cart.png" />
     <Content Include="Images\star-fill.svg" />
     <Content Include="Scripts\App\app.js" />
