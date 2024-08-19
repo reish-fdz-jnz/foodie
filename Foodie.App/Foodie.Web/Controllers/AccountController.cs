@@ -105,15 +105,25 @@ namespace Foodie.Web.Controllers
         {
             List<Role> roles = await this.roleService.GetRoles();
 
-            string defaultRole = "Customer";
-            TempData["roles"] = roles.Select(role => new SelectListItem()
+            List<SelectListItem> roleItems = roles.Select(role => new SelectListItem()
             {
                 Value = role.Name,
                 Text = role.Name,
-                Selected = role.Name == defaultRole
             }).ToList();
-            TempData["selectedRoleName"] = defaultRole;
-            return View();
+            roleItems.Add(new SelectListItem()
+            {
+                Value = "-1",
+                Text = "Select Role",
+                Selected = true
+            });
+            TempData["roles"] = roleItems;
+
+
+            RegisterViewModel registerViewModel = new RegisterViewModel() 
+            {
+                RoleName = "-1",
+            };
+            return View(registerViewModel);
         }
 
         //
@@ -133,11 +143,11 @@ namespace Foodie.Web.Controllers
                 };
                 
                 var result = await UserManager.CreateAsync(user, model.Password);
-                string role = TempData["selectedRoleName"].ToString();
+                
                 
                 if (result.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(user.Id, role);
+                    await UserManager.AddToRoleAsync(user.Id, model.RoleName);
                     await UserManager.SetPhoneNumberAsync(user.Id, model.PhoneNumber);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     

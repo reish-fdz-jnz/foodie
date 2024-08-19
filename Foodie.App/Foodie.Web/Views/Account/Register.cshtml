@@ -1,10 +1,7 @@
 ﻿@model Foodie.Web.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
-
     IEnumerable<SelectListItem> roles = (IEnumerable<SelectListItem>)TempData["roles"];
-    string selectedRoleName = TempData["selectedRoleName"].ToString();
-    TempData.Keep("selectedRoleName");
     string roleLabel = "Role";
 }
 
@@ -45,7 +42,7 @@
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
 
             <label class = "register-label">@roleLabel</label>
-            @Html.DropDownList(selectedRoleName, roles, new { @id = "roleDropDown", @class = "form-control" })
+            @Html.DropDownListFor(m => m.RoleName, roles, new { @id = "roleDropDown", @class = "form-control" })
 
             <input type="submit" value="Register" class="btn btn-dark register-btn" />
         </div>

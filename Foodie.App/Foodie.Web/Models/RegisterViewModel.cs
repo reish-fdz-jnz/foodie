@@ -38,6 +38,9 @@ namespace Foodie.Web.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The role name must be selected.")]
+        public string RoleName { get; set; }
+
 
     }
 }
