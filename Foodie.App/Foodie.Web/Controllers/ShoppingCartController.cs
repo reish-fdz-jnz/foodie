@@ -17,9 +17,12 @@ namespace Foodie.Web.Controllers
     {
         private IShoppingCartService shoppingCartService;
 
+        private IPaymentMethodService paymentMethodService;
+
 
         public ShoppingCartController() 
         {
+            this.paymentMethodService = new PaymentMethodService(new PaymentMethodRepository());
             this.shoppingCartService = new ShoppingCartService(new ShoppingCartRepository(), new ProductService(new ProductRepository()));
         }
 
@@ -31,6 +34,11 @@ namespace Foodie.Web.Controllers
             ViewBag.Carts = carts;
 
             ViewBag.CartCount = await this.shoppingCartService.GetItemsCountByUserId(User.Identity.GetUserId());
+
+            ViewBag.SubTotal = await this.shoppingCartService.CalculateSubTotalPrice(User.Identity.GetUserId());
+
+            List<PaymentMethod> paymentMethods = await this.paymentMethodService.GetPaymentMethodsByUserId(User.Identity.GetUserId());
+            ViewBag.GoToCheckOutEnabled = paymentMethods.Count > 0;
 
             return View();
         }

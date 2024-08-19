@@ -15,10 +15,8 @@ VALUES('Drinks'),
 	('Snacks');
 
 INSERT INTO [dbo].[AspNetPaymentType] (Name) 
-VALUES ('Credit Card'),
-		('Debit Card'),
-		('Paypal'),
-		('Cash');
+VALUES ('Debit Card' ),
+		('Credit Card');
 
 
 

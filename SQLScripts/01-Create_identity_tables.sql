@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS [dbo].[AspNetCart];
 DROP TABLE IF EXISTS [dbo].[AspNetOrder];
 DROP TABLE IF EXISTS [dbo].[AspNetOrderDetail];
 DROP TABLE IF EXISTS [dbo].[AspNetPaymentType];
-DROP TABLE IF EXISTS [dbo].[AspNetPayment];
+DROP TABLE IF EXISTS [dbo].[AspNetPaymentMethod];
 
 CREATE TABLE [dbo].[AspNetUsers] (
     [Id]                   NVARCHAR (128) NOT NULL,
@@ -122,29 +122,31 @@ CREATE TABLE [dbo].[AspNetCart] (
     CONSTRAINT [FK_dbo.AspNetCart_dbo.AspNetProduct] FOREIGN KEY (ProductId) REFERENCES [dbo].[AspNetProduct] ([Id]) ON DELETE CASCADE
 );
 
-CREATE TABLE [dbo].[AspNetPayment] (
+CREATE TABLE [dbo].[AspNetPaymentMethod] (
     [Id]          INT IDENTITY (1, 1) NOT NULL,
-	[CarNumber]     NVARCHAR (256) NOT NULL,
+	[CardNumber]     NVARCHAR (256) NOT NULL,
 	[ExpiryDate]  DATE NOT NULL,
     [Country]     NVARCHAR (256) NOT NULL,
-    [CvvNumber]   INT NOT NULL,
-    [PaymentTypeId] INT NOT NULL,
-    CONSTRAINT [PK_dbo.AspNetPayment] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_dbo.AspNetOrderDetail_dbo.AspNetPaymentType] FOREIGN KEY (PaymentTypeId) REFERENCES [dbo].[AspNetPaymentType] ([Id]) ON DELETE CASCADE,
+    [CvvNumber]   INT  NOT NULL,
+    [PaymentMethodTypeId] INT NOT NULL,
+    [UserId]         NVARCHAR (128) NOT NULL,
+    CONSTRAINT [PK_dbo.AspNetPaymentMethod] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_dbo.AspNetPaymentMethod_dbo.AspNetPaymentMethodType] FOREIGN KEY (PaymentTypeId) REFERENCES [dbo].[AspNetPaymentMethodType] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_dbo.AspNetPaymentMethod_dbo.AspNetUsers] FOREIGN KEY (UserId) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
 );
 
 CREATE TABLE [dbo].[AspNetOrder] (
     [Id]          INT IDENTITY (1, 1) NOT NULL,
     [Address]     NVARCHAR (256) NOT NULL,
     [Total]       DECIMAL(12,4) NOT NULL,
-    [SellerId]    NVARCHAR (128) NOT NULL,
+    [SellerId]    NVARCHAR (128)  NULL,
     [CustomerId]  NVARCHAR (128) NOT NULL,
-    [PaymentId]   INT  NOT NULL,
+    [PaymentMethodId]   INT NOT NULL,
     [OrderDateTimeUTC]   DATETIME NOT NULL,
     CONSTRAINT [PK_dbo.AspNetOrder] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersSeller] FOREIGN KEY (SellerId) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetUsersCustomer] FOREIGN KEY (CustomerId) REFERENCES [dbo].[AspNetUsers] ([Id]),
-    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetPayment] FOREIGN KEY (PaymentId) REFERENCES [dbo].[AspNetPayment] ([Id]) 
+    CONSTRAINT [FK_dbo.AspNetOrder_dbo.AspNetPaymentMethod] FOREIGN KEY (PaymentMethodId) REFERENCES [dbo].[AspNetPaymentMethod] ([Id]) 
 );
 
 CREATE TABLE [dbo].[AspNetOrderDetail] (
@@ -158,10 +160,10 @@ CREATE TABLE [dbo].[AspNetOrderDetail] (
 	CONSTRAINT [FK_dbo.AspNetOrderDetail_dbo.AspNetProduct] FOREIGN KEY (ProductId) REFERENCES [dbo].[AspNetProduct] ([Id]) ON DELETE CASCADE,
 ); 
 
-CREATE TABLE [dbo].[AspNetPaymentType] (
+CREATE TABLE [dbo].[AspNetPaymentMethodType] (
     [Id]  INT IDENTITY (1, 1) NOT NULL,
     [Name] NVARCHAR (128) NOT NULL,
-    CONSTRAINT [PK_dbo.AspNetPaymentType] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [PK_dbo.AspNetPaymentMethodType] PRIMARY KEY CLUSTERED ([Id] ASC),
 );
 
 

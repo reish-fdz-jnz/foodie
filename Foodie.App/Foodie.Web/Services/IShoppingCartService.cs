@@ -9,6 +9,7 @@ namespace Foodie.Web.Services
 {
     public interface IShoppingCartService
     {
+        decimal SubTotal { get; set; }
         Task InsertOrUpdateItem(Cart cart);
 
         Task DeleteItemById(int id);
@@ -18,5 +19,7 @@ namespace Foodie.Web.Services
         Task<List<Cart>> GetItemsByUserId(string userId);
 
         Task<int> GetItemsCountByUserId(string userId);
+
+        Task<decimal> CalculateSubTotalPrice(string userId);
     }
 }

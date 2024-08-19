@@ -5,12 +5,14 @@
     List<Cart> carts = (List<Cart>)ViewBag.Carts;
     int cartCount = (int)ViewBag.CartCount;
     string noItemsMessage = "The shopping cart is empty";
+    string noPaymentMethodMessage = "Please add a payment method to enable check out";
     string goToCheckOut = "Go To CheckOut";
     string deleteItem = "Delete";
     string currencyLabel = "CRC-";
     string unitsLabel = "-Unit(s)";
     string subtotalLabel = "SubTotal";
-    decimal subTotal = 0;
+    decimal subTotal = (decimal)ViewBag.SubTotal;
+    bool goToCheckOutEnabled = (bool)ViewBag.GoToCheckOutEnabled;
 }
 
 
@@ -33,15 +35,13 @@
                     @using (Html.BeginForm("DeleteCart", "ShoppingCart", FormMethod.Post, new { role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <input type="hidden" value="@cart.ProductId" name="ProductId" />
-                        <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
+                        <input type="hidden" value="@cart.Id" name="Id" />
                         <input type="submit" value="@deleteItem" class="btn btn-dark" />
                     }
 
                     @using (Html.BeginForm("AddToCart", "ShoppingCart", FormMethod.Post, new { role = "form", @class = "shopping-cart-form" }))
                     {
                         decimal productPriceByQuantity = cart.Product.Price * cart.Quantity;
-                        subTotal += productPriceByQuantity;
                         @Html.AntiForgeryToken()
                         <div class="shopping-cart-single-row">
                             <h5><span>@cart.Quantity</span>@unitsLabel</h5>
@@ -64,11 +64,18 @@
                 <h5>@currencyLabel<span>@subTotal</span></h5>
             </div>
         </div>
-        using (Html.BeginForm("Index", "CheckOut", FormMethod.Post, new { role = "form", @class = "checkout-btn" }))
+        if (goToCheckOutEnabled)
         {
-            @Html.AntiForgeryToken()
-            <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
-            <input type="submit" value="@goToCheckOut" class="btn btn-dark" />
+
+            using (Html.BeginForm("Index", "CheckOut", FormMethod.Get, new { role = "form", @class = "checkout-btn" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="@goToCheckOut" class="btn btn-dark" />
+            }
+        }
+        else
+        {
+            <h5>@noPaymentMethodMessage</h5>
         }
     }
     else
@@ -79,7 +86,7 @@
 </div>
 
 
-            @section Scripts {
-                @Scripts.Render("~/bundles/jqueryval")
-            }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 

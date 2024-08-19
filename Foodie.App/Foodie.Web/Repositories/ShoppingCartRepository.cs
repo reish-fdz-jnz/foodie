@@ -85,8 +85,19 @@ namespace Foodie.Web.Repositories
             }
         }
 
-        
-
-
+        public async Task<List<ProductByCart>> GetItemsByUserFromCartAndProduct(string userId)
+        {
+            string sqlConnection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            {
+                string sql = "SELECT C.UserId, C.ProductId, P.Price, C.Quantity " +
+                    "FROM dbo.AspNetCart C " +
+                    "INNER JOIN dbo.AspNetProduct P " +
+                    "ON C.ProductId = P.Id " +
+                    "WHERE C.UserId=@userId";
+                IEnumerable<ProductByCart> productsByCarts = await connection.QueryAsync<ProductByCart>(sql, new { userId = userId });
+                return productsByCarts.ToList();
+            }
+        }
     }
 }

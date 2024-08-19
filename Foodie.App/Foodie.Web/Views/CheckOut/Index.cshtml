@@ -1,30 +1,62 @@
 ﻿@using Foodie.Web.Models
 @using Microsoft.AspNet.Identity;
-@model Order
+@model CheckOut
 
 @{
+    string deliveryDetailsLabel = "Delivery Details";
     string addressLabel = "Address";
+    string orderTotalLabel = "Order Total";
+    IEnumerable<SelectListItem> paymentMethods = (IEnumerable<SelectListItem>)ViewBag.PaymentMethods;
 }
 
-<div class="order-container">
-    <div class="payment-information-container">
-        <h1>Delivery Details</h1>
-        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = addressLabel })
-    </div>
 
-    <table class="table order-table-container">
-        <thead>
-            <tr>
-                <th scope="col">Order Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>SubTotal</td>
-                <td>Delivery Fee</td>
-                <td>Service Fee</td>
-                <td>Total</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@using (Html.BeginForm("Index", "CheckOut", FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="order-container">
+        <div class="payment-textbox-container-one">
+            <h1>@deliveryDetailsLabel</h1>
+            @Html.TextBoxFor(m => m.Order.Address, new { @class = "form-control", placeholder = addressLabel })
+            @Html.DropDownListFor(m => m.PaymentMethodId, paymentMethods, new { @class = "form-control" })
+            @Html.HiddenFor(m => m.Order.CustomerId)
+            @Html.HiddenFor(m => m.Order.Total)
+            @Html.HiddenFor(m => m.Order.OrderDateTimeUTC)
+        </div>
+            <div class="payment-textbox-container-two">
+                <h1>@orderTotalLabel</h1>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>SubTotal</td>
+                            <td>    </td>
+                            <td>@Model.SubTotal</td>
+                        </tr>
+                        <tr>
+                            <td>Delivery Fee</td>
+                            <td>    </td>
+                            <td>@Model.DeliveryFee</td>
+                        </tr>
+                        <tr>
+                            <td>Service Fee</td>
+                            <td>    </td>
+                            <td>@Model.ServiceFee</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>    </td>
+                            <td>@Model.Order.Total</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            </div>
+
+    <div class="btn-container">
+        <input type="submit" value="Place the Order" class="btn btn-dark payment-btn" />
+    </div>
+}
+
+
+
+

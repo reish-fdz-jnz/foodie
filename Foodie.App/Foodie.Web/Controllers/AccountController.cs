@@ -177,7 +177,7 @@ namespace Foodie.Web.Controllers
                 
                 var result = await UserManager.CreateAsync(user, model.Password);
                 string role = TempData["selectedRoleName"].ToString();
-                ;
+                
                 if (result.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(user.Id, role);

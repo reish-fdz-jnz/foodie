@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Foodie.Web.Models
 {
-    public class PaymentType
+    public class PaymentMethodType
     {
         public int Id { get; set; } 
 

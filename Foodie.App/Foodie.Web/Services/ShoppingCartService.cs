@@ -1,7 +1,9 @@
 ﻿using Foodie.Web.Models;
 using Foodie.Web.Repositories;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,6 +15,8 @@ namespace Foodie.Web.Services
         private IShoppingCartRepository shoppingCartRepository;
 
         private IProductService productService;
+
+        public decimal SubTotal { get; set; }
         public ShoppingCartService(IShoppingCartRepository shoppingCartRepository, IProductService productService) 
         { 
             this.shoppingCartRepository = shoppingCartRepository;
@@ -60,9 +64,8 @@ namespace Foodie.Web.Services
                 Product product = products.FirstOrDefault(p => p.Id == cart.ProductId);
                 if (product != null) 
                 {
-                    cart.Product =product;
+                    cart.Product = product;
                 }
-                
             }
             return carts;
         }
@@ -71,8 +74,22 @@ namespace Foodie.Web.Services
         public async Task<int> GetItemsCountByUserId(string userId)
         {
             List<Cart> carts = await shoppingCartRepository.GetItemsByUserId(userId);
-
             return carts.Count();
+        }
+
+        public async Task<decimal> CalculateSubTotalPrice(string userId)
+        {
+            decimal productPriceByQuantity = 0;
+
+            List<ProductByCart> productsByCarts = await shoppingCartRepository.GetItemsByUserFromCartAndProduct(userId);
+
+            foreach (ProductByCart productByCart in productsByCarts) 
+            {
+                productPriceByQuantity = productByCart.Price * productByCart.Quantity;
+                SubTotal += productPriceByQuantity;
+            }
+
+            return SubTotal;
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Foodie.Web.Repositories
     public class OrderRepository : IOrderRepository
     {
         public OrderRepository()
-        { }
+        { 
+        }
 
         public async Task InsertItem(Order order)
         {
@@ -23,7 +24,7 @@ namespace Foodie.Web.Repositories
                 string sql = "INSERT INTO [AspNetOrder] (PaymentId,SellerId,CustomerId,Address,OrderDateTimeUTC)  VALUES (@paymentId, @sellerId, @customerId,@address,@orderDateTimeUTC)";
                 object parameters = new
                 {
-                    PaymentId = order.PaymentId,
+                    PaymentId = order.PaymentMethodId,
                     SellerId = order.SellerId,
                     CustomerId = order.CustomerId,
                     Address = order.Address,
