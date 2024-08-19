@@ -13,8 +13,8 @@ namespace Foodie.Web.Services
 
         decimal ServiceFee { get; set; }
 
-        Task CheckOut(CheckOut checkOut);
+        Task CheckOut(CheckOut checkOut, List<Cart> carts);
 
-        Task<decimal> CalculateTotalPrice(decimal subTotal);
+        decimal CalculateTotalPrice(decimal subTotal);
     }
 }

@@ -22,15 +22,28 @@ namespace Foodie.Web.Services
             this.ServiceFee = 450;
         }
 
-        public async Task<decimal> CalculateTotalPrice(decimal subTotal)
+        public  decimal CalculateTotalPrice(decimal subTotal)
         {
             decimal totalPrice = subTotal + DeliveryFee + ServiceFee;
 
             return totalPrice;
         }
 
-        public async Task CheckOut(CheckOut checkOut)
+        public async Task CheckOut(CheckOut checkOut, List<Cart> carts)
         {
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            foreach (Cart cart in carts)
+            {
+                OrderDetail orderDetail = new OrderDetail() 
+                {
+                    ProductId = cart.ProductId,
+                    Quantity = cart.Quantity,
+                    UnitPrice = cart.Product.Price,
+                };
+
+                orderDetails.Add(orderDetail);
+            }
+            checkOut.OrderDetails = orderDetails;
             await this.checkOutRepository.CheckOut(checkOut.Order, checkOut.OrderDetails);
         }
 

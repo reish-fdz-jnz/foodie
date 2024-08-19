@@ -34,7 +34,7 @@ namespace Foodie.Web.Controllers
         {
             CheckOut checkOut = new CheckOut();
             decimal subTotal = await this.shoppingCartService.CalculateSubTotalPrice(User.Identity.GetUserId());
-            decimal total = await this.checkOutService.CalculateTotalPrice(subTotal);
+            decimal total = this.checkOutService.CalculateTotalPrice(subTotal);
             checkOut.PaymentMethodId = "-1";
             checkOut.SubTotal = subTotal;
             checkOut.DeliveryFee = this.checkOutService.DeliveryFee;
@@ -58,9 +58,10 @@ namespace Foodie.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(CheckOut checkOut)
         {
+            string userId = User.Identity.GetUserId();
             if (!ModelState.IsValid)
             {
-                List<PaymentMethod> paymentMethods = await this.paymentMethodService.GetPaymentMethodsByUserId(User.Identity.GetUserId());
+                List<PaymentMethod> paymentMethods = await this.paymentMethodService.GetPaymentMethodsByUserId(userId);
 
                 ViewBag.PaymentMethods = this.MapPaymentMethodsToSelectListItems(paymentMethods);
 
@@ -68,7 +69,9 @@ namespace Foodie.Web.Controllers
             }
             checkOut.Order.PaymentMethodId = Int32.Parse(checkOut.PaymentMethodId);
 
-            await this.checkOutService.CheckOut(checkOut);
+            List<Cart> carts = await this.shoppingCartService.GetItemsByUserId(userId); 
+
+            await this.checkOutService.CheckOut(checkOut, carts);
 
             return RedirectToAction("Index", "Home");
         }

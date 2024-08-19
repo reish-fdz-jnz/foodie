@@ -39,6 +39,30 @@ namespace Foodie.Web.Repositories
                     };
                     order.Id = await connection.ExecuteScalarAsync<int>(sqlOrder, parameters, tran);
 
+                    string sqlOrderDetail = "INSERT INTO [AspNetOrderDetail] (OrderId,ProductId,Quantity,UnitPrice)  VALUES (@orderId,@productId, @quantity, @unitPrice); ";
+
+                    foreach (OrderDetail detail in orderDetails)
+                    {
+                        detail.OrderId = order.Id;
+                        object orderDetailParameters = new
+                        {
+                            OrderId = detail.OrderId,
+                            ProductId = detail.ProductId,
+                            Quantity = detail.Quantity,
+                            UnitPrice = detail.UnitPrice,
+                        };
+                        
+                        int detailRowsAffected = await connection.ExecuteAsync(sqlOrderDetail, orderDetailParameters, tran);
+                    }
+
+                    string sqlCart = "DELETE FROM [AspNetCart] WHERE [UserId]=@userId";
+
+                    object cartParameters = new
+                    {
+                        UserId = order.CustomerId,
+                    };
+                    int rowsAffected = await connection.ExecuteAsync(sqlCart, cartParameters, tran);
+
                     tran.Commit();
                 }
               

@@ -67,6 +67,8 @@ namespace Foodie.Web.Controllers
 
             ViewBag.Products = products;
 
+            ViewBag.CartCount = await this.shoppingCartService.GetItemsCountByUserId(User.Identity.GetUserId());
+
             return View(productSearchFilters);
         }
 
